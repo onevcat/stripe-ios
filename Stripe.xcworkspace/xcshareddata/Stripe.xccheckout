@@ -10,6 +10,8 @@
 	<string>Stripe</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>8F2DCDF0F94459E6E39876EAABAF22AE32FCABE1</key>
+		<string>bitbucket.org:onevcat/unistripe.git</string>
 		<key>A5C151FC3F18980DA2906AAA3DE9140767EF2310</key>
 		<string>ssh://github.com/stripe/stripe-ios.git</string>
 		<key>D0DC6CE0350266C4AFFCC35DA49B75AE57E8D73E</key>
@@ -19,6 +21,8 @@
 	<string>Stripe.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>8F2DCDF0F94459E6E39876EAABAF22AE32FCABE1</key>
+		<string>../..</string>
 		<key>A5C151FC3F18980DA2906AAA3DE9140767EF2310</key>
 		<string>..</string>
 		<key>D0DC6CE0350266C4AFFCC35DA49B75AE57E8D73E</key>
@@ -32,6 +36,14 @@
 	<string>A5C151FC3F18980DA2906AAA3DE9140767EF2310</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8F2DCDF0F94459E6E39876EAABAF22AE32FCABE1</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
