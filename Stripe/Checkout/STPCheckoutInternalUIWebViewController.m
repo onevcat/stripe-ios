@@ -19,17 +19,21 @@
 #import "StripeError.h"
 #import "STPToken.h"
 #import "STPColorUtils.h"
+#import "STPAPIResponseDecodable.h"
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 
 #define FAUXPAS_IGNORED_IN_METHOD(...)
 
 @interface STPCheckoutInternalUIWebViewController ()
 @property (nonatomic) BOOL statusBarHidden;
-@property (weak, nonatomic, stp_nullable) UIView *webView;
-@property (nonatomic, stp_nullable) STPIOSCheckoutWebViewAdapter *adapter;
-@property (nonatomic, stp_nonnull) NSURL *url;
-@property (weak, nonatomic, stp_nullable) UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic, nullable) UIView *webView;
+@property (nonatomic, nullable) STPIOSCheckoutWebViewAdapter *adapter;
+@property (nonatomic, nonnull) NSURL *url;
+@property (weak, nonatomic, nullable) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic) BOOL backendChargeSuccessful;
-@property (nonatomic, stp_nullable) NSError *backendChargeError;
+@property (nonatomic, nullable) NSError *backendChargeError;
 @end
 
 @implementation STPCheckoutInternalUIWebViewController
@@ -153,7 +157,7 @@
     } else if ([event isEqualToString:STPCheckoutEventTokenize]) {
         STPToken *token = nil;
         if (payload != nil && payload[@"token"] != nil) {
-            token = [[STPToken alloc] initWithAttributeDictionary:payload[@"token"]];
+            token = [STPToken decodedObjectFromAPIResponse:payload[@"token"]];
         }
         [self.delegate checkoutController:self.checkoutController
                            didCreateToken:token
@@ -231,5 +235,7 @@
 }
 
 @end
+
+#pragma clang diagnostic pop
 
 #endif

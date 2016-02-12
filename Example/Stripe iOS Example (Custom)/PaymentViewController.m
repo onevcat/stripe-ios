@@ -7,13 +7,12 @@
 
 #import <Stripe/Stripe.h>
 #import "ViewController.h"
-#import "MBProgressHUD.h"
-#import "PTKView.h"
 
 #import "PaymentViewController.h"
 
-@interface PaymentViewController () <PTKViewDelegate>
-@property (weak, nonatomic) PTKView *paymentView;
+@interface PaymentViewController () <STPPaymentCardTextFieldDelegate>
+@property (weak, nonatomic) STPPaymentCardTextField *paymentTextField;
+@property (weak, nonatomic) UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation PaymentViewController
@@ -21,11 +20,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"Checkout";
+    self.title = @"Buy a shirt";
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-
+    
     // Setup save button
     NSString *title = [NSString stringWithFormat:@"Pay $%@", self.amount];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleDone target:self action:@selector(save:)];
@@ -33,17 +32,32 @@
     saveButton.enabled = NO;
     self.navigationItem.leftBarButtonItem = cancelButton;
     self.navigationItem.rightBarButtonItem = saveButton;
-
-    // Setup checkout
-    PTKView *paymentView = [[PTKView alloc] initWithFrame:CGRectMake(15, 20, 290, 55)];
-    paymentView.delegate = self;
-    self.paymentView = paymentView;
-    [self.view addSubview:paymentView];
+    
+    // Setup payment view
+    STPPaymentCardTextField *paymentTextField = [[STPPaymentCardTextField alloc] init];
+    paymentTextField.delegate = self;
+    paymentTextField.cursorColor = [UIColor purpleColor];
+    self.paymentTextField = paymentTextField;
+    [self.view addSubview:paymentTextField];
+    
+    // Setup Activity Indicator
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    [self.view addSubview:activityIndicator];
 }
 
-- (void)paymentView:(PTKView *)paymentView withCard:(PTKCard *)card isValid:(BOOL)valid {
-    // Enable save button if the Checkout is valid
-    self.navigationItem.rightBarButtonItem.enabled = valid;
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    CGFloat padding = 15;
+    CGFloat width = CGRectGetWidth(self.view.frame) - (padding * 2);
+    self.paymentTextField.frame = CGRectMake(padding, padding, width, 44);
+    
+    self.activityIndicator.center = self.view.center;
+}
+
+- (void)paymentCardTextFieldDidChange:(nonnull STPPaymentCardTextField *)textField {
+    self.navigationItem.rightBarButtonItem.enabled = textField.isValid;
 }
 
 - (void)cancel:(id)sender {
@@ -51,27 +65,22 @@
 }
 
 - (void)save:(id)sender {
-    if (![self.paymentView isValid]) {
+    if (![self.paymentTextField isValid]) {
         return;
     }
     if (![Stripe defaultPublishableKey]) {
         NSError *error = [NSError errorWithDomain:StripeDomain
                                              code:STPInvalidRequestError
                                          userInfo:@{
-                                             NSLocalizedDescriptionKey: @"Please specify a Stripe Publishable Key in Constants.m"
-                                         }];
+                                                    NSLocalizedDescriptionKey: @"Please specify a Stripe Publishable Key in Constants.m"
+                                                    }];
         [self.delegate paymentViewController:self didFinish:error];
         return;
     }
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    STPCard *card = [[STPCard alloc] init];
-    card.number = self.paymentView.card.number;
-    card.expMonth = self.paymentView.card.expMonth;
-    card.expYear = self.paymentView.card.expYear;
-    card.cvc = self.paymentView.card.cvc;
-    [[STPAPIClient sharedClient] createTokenWithCard:card
+    [self.activityIndicator startAnimating];
+    [[STPAPIClient sharedClient] createTokenWithCard:self.paymentTextField.cardParams
                                           completion:^(STPToken *token, NSError *error) {
-                                              [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                              [self.activityIndicator stopAnimating];
                                               if (error) {
                                                   [self.delegate paymentViewController:self didFinish:error];
                                               }

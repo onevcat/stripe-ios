@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TargetConditionals.h"
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #define STP_COLOR_CLASS UIColor
@@ -15,13 +16,13 @@
 #define STP_COLOR_CLASS NSColor
 #endif
 
-#import "STPNullabilityMacros.h"
+
 
 @interface STPColorUtils : NSObject
 
-+ (BOOL)colorIsLight:(stp_nonnull STP_COLOR_CLASS *)color;
++ (BOOL)colorIsLight:(nonnull STP_COLOR_CLASS *)color;
 
-+ (stp_nonnull STP_COLOR_CLASS *)colorForHexCode:(stp_nonnull NSString *)hexCode;
-+ (stp_nonnull NSString *)hexCodeForColor:(stp_nonnull STP_COLOR_CLASS *)color;
++ (nonnull STP_COLOR_CLASS *)colorForHexCode:(nonnull NSString *)hexCode;
++ (nonnull NSString *)hexCodeForColor:(nonnull STP_COLOR_CLASS *)color;
 
 @end

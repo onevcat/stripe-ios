@@ -5,15 +5,20 @@
 //  Created by Jack Flintermann on 12/19/14.
 //
 
-#import "STPAPIClient+ApplePay.h"
 #import <AddressBook/AddressBook.h>
+
+#import "STPAPIClient+ApplePay.h"
+#import "PKPayment+Stripe.h"
+#import "STPAPIClient+Private.h"
 
 @implementation STPAPIClient (ApplePay)
 
-- (void)createTokenWithPayment:(PKPayment *)payment completion:(STPCompletionBlock)completion {
+- (void)createTokenWithPayment:(PKPayment *)payment completion:(STPTokenCompletionBlock)completion {
     [self createTokenWithData:[self.class formEncodedDataForPayment:payment] completion:completion];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated"
 + (NSData *)formEncodedDataForPayment:(PKPayment *)payment {
     NSCAssert(payment != nil, @"Cannot create a token with a nil payment.");
     NSMutableCharacterSet *set = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
@@ -74,13 +79,20 @@
         NSString *param = [NSString stringWithFormat:@"&pk_token_payment_network=%@", payment.token.paymentNetwork];
         payloadString = [payloadString stringByAppendingString:param];
     }
-
+    
     if (payment.token.transactionIdentifier) {
-        NSString *param = [NSString stringWithFormat:@"&pk_token_transaction_id=%@", payment.token.transactionIdentifier];
+        NSString *transactionIdentifier = payment.token.transactionIdentifier;
+        if ([payment stp_isSimulated]) {
+            transactionIdentifier = [PKPayment stp_testTransactionIdentifier];
+        }
+        NSString *param = [NSString stringWithFormat:@"&pk_token_transaction_id=%@", transactionIdentifier];
         payloadString = [payloadString stringByAppendingString:param];
     }
 
     return [payloadString dataUsingEncoding:NSUTF8StringEncoding];
 }
+#pragma clang diagnostic pop
 
 @end
+
+void linkSTPAPIClientApplePayCategory(void){}

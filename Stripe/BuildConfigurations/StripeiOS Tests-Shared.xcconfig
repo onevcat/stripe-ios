@@ -21,6 +21,9 @@ CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR
 CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR
 
 
+IPHONEOS_DEPLOYMENT_TARGET = 8.0
+
+
 // Code Signing Identity
 // 
 // The name ("common name") of a valid code-signing certificate in a keychain within your
@@ -37,7 +40,7 @@ CODE_SIGN_IDENTITY = iPhone Developer
 // delimited by whitespace, so any paths with spaces in them need to be properly quoted.
 // [-F]
 
-FRAMEWORK_SEARCH_PATHS = $(SDKROOT)/Developer/Library/Frameworks $(inherited)
+FRAMEWORK_SEARCH_PATHS = $(inherited)
 
 
 GCC_TREAT_WARNINGS_AS_ERRORS = YES

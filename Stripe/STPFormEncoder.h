@@ -7,18 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "STPNullabilityMacros.h"
 
-@class STPBankAccount, STPCard;
+@class STPCardParams, STPBankAccountParams;
+@protocol STPFormEncodable;
 
 @interface STPFormEncoder : NSObject
 
-+ (stp_nonnull NSData *)formEncodedDataForBankAccount:(stp_nonnull STPBankAccount *)bankAccount;
++ (nonnull NSData *)formEncodedDataForObject:(nonnull NSObject<STPFormEncodable> *)object;
 
-+ (stp_nonnull NSData *)formEncodedDataForCard:(stp_nonnull STPCard *)card;
++ (nonnull NSString *)stringByURLEncoding:(nonnull NSString *)string;
 
-+ (stp_nonnull NSString *)stringByURLEncoding:(stp_nonnull NSString *)string;
-
-+ (stp_nonnull NSString *)stringByReplacingSnakeCaseWithCamelCase:(stp_nonnull NSString *)input;
++ (nonnull NSString *)stringByReplacingSnakeCaseWithCamelCase:(nonnull NSString *)input;
 
 @end

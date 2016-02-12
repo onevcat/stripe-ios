@@ -16,6 +16,9 @@
 
 #define FAUXPAS_IGNORED_IN_METHOD(...)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+
 #if TARGET_OS_IPHONE
 #pragma mark - iOS
 
@@ -138,7 +141,7 @@
     } else if ([event isEqualToString:STPCheckoutEventTokenize]) {
         STPToken *token = nil;
         if (payload != nil && payload[@"token"] != nil) {
-            token = [[STPToken alloc] initWithAttributeDictionary:payload[@"token"]];
+            token = [STPToken decodedObjectFromAPIResponse:payload[@"token"]];
         }
         [self.checkoutDelegate checkoutController:self
                                    didCreateToken:token
@@ -184,3 +187,5 @@
 @end
 
 #endif
+
+#pragma clang diagnostic pop

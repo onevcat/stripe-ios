@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 Stripe, Inc. All rights reserved.
 //
 
+@import XCTest;
+@import PassKit;
+
 #import "STPAPIClient.h"
 #import "STPAPIClient+ApplePay.h"
-#import <XCTest/XCTest.h>
-#import <PassKit/PassKit.h>
 
 @interface STPApplePayTest : XCTestCase
 
@@ -64,7 +65,7 @@
 
     STPAPIClient *client = [[STPAPIClient alloc] initWithPublishableKey:@"pk_test_vOo1umqsYxSrP5UXfOeL3ecm"];
 
-    XCTestExpectation *expectation = [self expectationWithDescription:@"Bank account creation"];
+    XCTestExpectation *expectation = [self expectationWithDescription:@"Apple pay token creation"];
     [client createTokenWithPayment:payment
                         completion:^(STPToken *token, NSError *error) {
                             [expectation fulfill];

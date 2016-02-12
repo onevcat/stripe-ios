@@ -11,10 +11,20 @@
 		042CA41F1A685E8D00D778E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 042CA4171A685E8D00D778E7 /* Main.storyboard */; };
 		042CA4201A685E8D00D778E7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 042CA4191A685E8D00D778E7 /* Images.xcassets */; };
 		042CA4221A685E8D00D778E7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042CA41C1A685E8D00D778E7 /* ViewController.swift */; };
-		048BC5041A9BC38400B2FDC3 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048BC5031A9BC38400B2FDC3 /* Alamofire.swift */; };
 		04D0761D1A69E66F00094431 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04D076191A69C14700094431 /* Stripe.framework */; };
 		04D0761E1A69E66F00094431 /* Stripe.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04D076191A69C14700094431 /* Stripe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C11745DF1C456D6D0029936F /* STPPaymentCardTextFieldUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C11745DE1C456D6D0029936F /* STPPaymentCardTextFieldUITests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C11745D81C456C730029936F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04823F701A6849200098400B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04823F771A6849200098400B;
+			remoteInfo = "Stripe iOS Example (Simple)";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		04D0761F1A69E66F00094431 /* Embed Frameworks */ = {
@@ -37,9 +47,12 @@
 		042CA41A1A685E8D00D778E7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		042CA41C1A685E8D00D778E7 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		04823F781A6849200098400B /* Stripe iOS Example (Simple).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Stripe iOS Example (Simple).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		048BC5031A9BC38400B2FDC3 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alamofire.swift; sourceTree = "<group>"; };
 		04D075D91A69B82B00094431 /* Stripe iOS Example (Simple).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "Stripe iOS Example (Simple).entitlements"; sourceTree = "<group>"; };
 		04D076191A69C14700094431 /* Stripe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Stripe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C11745D31C456C730029936F /* Stripe iOS Application Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Stripe iOS Application Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C11745D71C456C730029936F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C11745DD1C456D6D0029936F /* Stripe iOS Application Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Stripe iOS Application Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		C11745DE1C456D6D0029936F /* STPPaymentCardTextFieldUITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPPaymentCardTextFieldUITests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,13 +64,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C11745D01C456C730029936F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		042CA4131A685E8D00D778E7 /* Stripe iOS Example (Simple) */ = {
 			isa = PBXGroup;
 			children = (
-				048BC5021A9BC38400B2FDC3 /* Vendor */,
 				042CA4141A685E8D00D778E7 /* AppDelegate.swift */,
 				042CA41C1A685E8D00D778E7 /* ViewController.swift */,
 				042CA4171A685E8D00D778E7 /* Main.storyboard */,
@@ -72,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				042CA4131A685E8D00D778E7 /* Stripe iOS Example (Simple) */,
+				C11745D41C456C730029936F /* Stripe iOS Application Tests */,
 				04823F9F1A6849850098400B /* Frameworks */,
 				04823F791A6849200098400B /* Products */,
 			);
@@ -81,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				04823F781A6849200098400B /* Stripe iOS Example (Simple).app */,
+				C11745D31C456C730029936F /* Stripe iOS Application Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,12 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		048BC5021A9BC38400B2FDC3 /* Vendor */ = {
+		C11745D41C456C730029936F /* Stripe iOS Application Tests */ = {
 			isa = PBXGroup;
 			children = (
-				048BC5031A9BC38400B2FDC3 /* Alamofire.swift */,
+				C11745DE1C456D6D0029936F /* STPPaymentCardTextFieldUITests.m */,
+				C11745D71C456C730029936F /* Info.plist */,
+				C11745DD1C456D6D0029936F /* Stripe iOS Application Tests-Bridging-Header.h */,
 			);
-			path = Vendor;
+			path = "Stripe iOS Application Tests";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,13 +145,32 @@
 			productReference = 04823F781A6849200098400B /* Stripe iOS Example (Simple).app */;
 			productType = "com.apple.product-type.application";
 		};
+		C11745D21C456C730029936F /* Stripe iOS Application Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C11745DC1C456C730029936F /* Build configuration list for PBXNativeTarget "Stripe iOS Application Tests" */;
+			buildPhases = (
+				C11745CF1C456C730029936F /* Sources */,
+				C11745D01C456C730029936F /* Frameworks */,
+				C11745D11C456C730029936F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C11745D91C456C730029936F /* PBXTargetDependency */,
+			);
+			name = "Stripe iOS Application Tests";
+			productName = "Stripe iOS Application Tests";
+			productReference = C11745D31C456C730029936F /* Stripe iOS Application Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		04823F701A6849200098400B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Stripe;
 				TargetAttributes = {
 					04823F771A6849200098400B = {
@@ -141,6 +183,10 @@
 								enabled = 0;
 							};
 						};
+					};
+					C11745D21C456C730029936F = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 04823F771A6849200098400B;
 					};
 				};
 			};
@@ -158,6 +204,7 @@
 			projectRoot = "";
 			targets = (
 				04823F771A6849200098400B /* Stripe iOS Example (Simple) */,
+				C11745D21C456C730029936F /* Stripe iOS Application Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -172,6 +219,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C11745D11C456C730029936F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -179,13 +233,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				048BC5041A9BC38400B2FDC3 /* Alamofire.swift in Sources */,
 				042CA4221A685E8D00D778E7 /* ViewController.swift in Sources */,
 				042CA41D1A685E8D00D778E7 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C11745CF1C456C730029936F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C11745DF1C456D6D0029936F /* STPPaymentCardTextFieldUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C11745D91C456C730029936F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04823F771A6849200098400B /* Stripe iOS Example (Simple) */;
+			targetProxy = C11745D81C456C730029936F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		042CA4171A685E8D00D778E7 /* Main.storyboard */ = {
@@ -219,6 +288,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -233,7 +303,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -270,7 +340,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Stripe iOS Example (Simple)/Stripe iOS Example (Simple)-Bridging-Header.h";
@@ -294,6 +364,7 @@
 				INFOPLIST_FILE = "Stripe iOS Example (Simple)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stripe.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "Stripe iOS Example (Simple)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -318,10 +389,47 @@
 				INFOPLIST_FILE = "Stripe iOS Example (Simple)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stripe.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "Stripe iOS Example (Simple)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C11745DA1C456C730029936F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Stripe iOS Application Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stripe.Stripe-iOS-Application-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Stripe iOS Application Tests/Stripe iOS Application Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stripe iOS Example (Simple).app/Stripe iOS Example (Simple)";
+			};
+			name = Debug;
+		};
+		C11745DB1C456C730029936F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Stripe iOS Application Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.stripe.Stripe-iOS-Application-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Stripe iOS Application Tests/Stripe iOS Application Tests-Bridging-Header.h";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Stripe iOS Example (Simple).app/Stripe iOS Example (Simple)";
 			};
 			name = Release;
 		};
@@ -345,6 +453,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		C11745DC1C456C730029936F /* Build configuration list for PBXNativeTarget "Stripe iOS Application Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C11745DA1C456C730029936F /* Debug */,
+				C11745DB1C456C730029936F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

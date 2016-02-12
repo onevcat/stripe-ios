@@ -1,11 +1,32 @@
-== 4.0.3 2015-05-15
-* Fix an issue with Carthage installation
+== 6.2.0 2016-02-05
+* Added an `additionalAPIParameters` field to STPCardParams and STPBankAccountParams for sending additional values to the API - useful for beta features. Similarly, added an `allResponseFields` property to STPToken, STPCard, and STPBankAccount for accessing fields in the response that are not yet refelected in those classes' @properties.
 
-== 4.0.2 2015-05-07
-* Fix an issue with Cocoapods installation
+== 6.1.0 2016-01-21
+* Renamed card on STPPaymentCardTextField to cardParams.
+* You can now set an STPPaymentCardTextField's contents programmatically by setting cardParams to an STPCardParams object.
+* Added delegate methods for responding to didBeginEditing events in STPPaymentCardTextField.
+* Added a UIImage category for accessing our card icon images
+* Fixed deprecation warnings for deployment targets >= iOS 9.0
+
+== 6.0.0 2015-10-19
+* Splits logic in STPCard into 2 classes - STPCard and STPCardParams. STPCardParams is for making requests to the Stripe API, while STPCard represents the response (you'll almost certainly want just to replace any usage of STPCard in your app with STPCardParams). This also applies to STPBankAccount and the newly-created STPBankAccountParams.
+* Version 6.0.1 fixes a minor Cocoapods issue.
+
+== 5.1.0 2015-08-17
+* Adds STPPaymentCardTextField, a new version of github.com/stripe/PaymentKit featuring many bugfixes. It's useful if you need a pre-built credit card entry form.
+* Adds the currency param to STPCard for those using managed accounts & debit card payouts.
+* Versions 5.1.1 and 5.1.2 fix minor issues with CocoaPods installation
+* Version 5.1.3 contains bug fixes for STPPaymentCardTextField.
+* Version 5.1.4 improves compatibility with iOS 9.
+
+== 5.0.0 2015-08-06
+* Fix an issue with Carthage installation
+* Fix an issue with CocoaPods frameworks
+* Deprecate native Stripe Checkout
 
 == 4.0.1 2015-05-06
 * Fix a compiler warning
+* Versions 4.0.1 and 4.0.2 fix minor issues with CocoaPods and Carthage installation.
 
 == 4.0.0 2015-05-06
 * Remove STPPaymentPresenter
@@ -17,6 +38,7 @@
 * Add support for native Stripe Checkout, as well as STPPaymentPresenter for automatically using Checkout as a fallback for Apple Pay
 * Add OSX support, including Checkout
 * Add framework targets and Carthage support
+* It's safe to remove the STRIPE_ENABLE_APPLEPAY compiler flag after this release.
 
 == 3.0.0 2015-01-05
 * Migrate code into STPAPIClient
@@ -91,7 +113,7 @@
 
 === 1.0.2 2013-09-09
 
-* Add exceptions for null successHandler and errorHandler. 
+* Add exceptions for null successHandler and errorHandler.
 * Added the ability to POST the created token to a URL.
 * Made STPCard properties nonatomic.
 * Moved PaymentKit to be a submodule; added to Podfile as a dependency.

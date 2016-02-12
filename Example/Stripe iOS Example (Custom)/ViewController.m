@@ -7,15 +7,13 @@
 //
 
 #import <Stripe/Stripe.h>
-#import "AFNetworking.h"
 
 #import "ViewController.h"
 #import "PaymentViewController.h"
 #import "Constants.h"
 #import "ShippingManager.h"
-#import <ApplePayStubs/ApplePayStubs.h>
 
-@interface ViewController () <PaymentViewControllerDelegate, STPCheckoutViewControllerDelegate, PKPaymentAuthorizationViewControllerDelegate>
+@interface ViewController () <PaymentViewControllerDelegate, PKPaymentAuthorizationViewControllerDelegate>
 @property (nonatomic) BOOL applePaySucceeded;
 @property (nonatomic) NSError *applePayError;
 @property (nonatomic) ShippingManager *shippingManager;
@@ -31,20 +29,17 @@
 }
 
 - (void)presentError:(NSError *)error {
-    UIAlertView *message = [[UIAlertView alloc] initWithTitle:nil
-                                                      message:[error localizedDescription]
-                                                     delegate:nil
-                                            cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
-                                            otherButtonTitles:nil];
-    [message show];
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:nil message:[error localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [controller addAction:action];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (void)paymentSucceeded {
-    [[[UIAlertView alloc] initWithTitle:@"Success!"
-                                message:@"Payment successfully created!"
-                               delegate:nil
-                      cancelButtonTitle:nil
-                      otherButtonTitles:@"OK", nil] show];
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"Success" message:@"Payment successfully created!" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    [controller addAction:action];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 #pragma mark - Apple Pay
@@ -69,23 +64,21 @@
         [paymentRequest setRequiredBillingAddressFields:PKAddressFieldPostalAddress];
         paymentRequest.shippingMethods = [self.shippingManager defaultShippingMethods];
         paymentRequest.paymentSummaryItems = [self summaryItemsForShippingMethod:paymentRequest.shippingMethods.firstObject];
-#if DEBUG
-        STPTestPaymentAuthorizationViewController *auth = [[STPTestPaymentAuthorizationViewController alloc] initWithPaymentRequest:paymentRequest];
-#else
         PKPaymentAuthorizationViewController *auth = [[PKPaymentAuthorizationViewController alloc] initWithPaymentRequest:paymentRequest];
-#endif
         auth.delegate = self;
-        [self presentViewController:auth animated:YES completion:nil];
+        if (auth) {
+            [self presentViewController:auth animated:YES completion:nil];
+        } else {
+            NSLog(@"Apple Pay returned a nil PKPaymentAuthorizationViewController - make sure you've configured Apple Pay correctly, as outlined at https://stripe.com/docs/mobile/apple-pay");
+        }
     }
 }
 
-- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller
-                  didSelectShippingAddress:(ABRecordRef)address
-                                completion:(void (^)(PKPaymentAuthorizationStatus status, NSArray *shippingMethods, NSArray *summaryItems))completion {
+- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller didSelectShippingAddress:(ABRecordRef)address completion:(void (^)(PKPaymentAuthorizationStatus, NSArray<PKShippingMethod *> * _Nonnull, NSArray<PKPaymentSummaryItem *> * _Nonnull))completion {
     [self.shippingManager fetchShippingCostsForAddress:address
                                             completion:^(NSArray *shippingMethods, NSError *error) {
                                                 if (error) {
-                                                    completion(PKPaymentAuthorizationStatusFailure, nil, nil);
+                                                    completion(PKPaymentAuthorizationStatusFailure, @[], @[]);
                                                     return;
                                                 }
                                                 completion(PKPaymentAuthorizationStatusSuccess,
@@ -94,9 +87,7 @@
                                             }];
 }
 
-- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller
-                   didSelectShippingMethod:(PKShippingMethod *)shippingMethod
-                                completion:(void (^)(PKPaymentAuthorizationStatus, NSArray *summaryItems))completion {
+- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller didSelectShippingMethod:(PKShippingMethod *)shippingMethod completion:(void (^)(PKPaymentAuthorizationStatus, NSArray<PKPaymentSummaryItem *> * _Nonnull))completion {
     completion(PKPaymentAuthorizationStatusSuccess, [self summaryItemsForShippingMethod:shippingMethod]);
 }
 
@@ -126,45 +117,15 @@
 }
 
 - (void)paymentAuthorizationViewControllerDidFinish:(PKPaymentAuthorizationViewController *)controller {
-    if (self.applePaySucceeded) {
-        [self paymentSucceeded];
-    } else if (self.applePayError) {
-        [self presentError:self.applePayError];
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
-    self.applePaySucceeded = NO;
-    self.applePayError = nil;
-}
-
-#pragma mark - Stripe Checkout
-
-- (IBAction)beginStripeCheckout:(id)sender {
-    STPCheckoutOptions *options = [[STPCheckoutOptions alloc] initWithPublishableKey:[Stripe defaultPublishableKey]];
-    options.purchaseDescription = @"Cool Shirt";
-    options.purchaseAmount = 1000; // this is in cents
-    options.logoColor = [UIColor purpleColor];
-    STPCheckoutViewController *checkoutViewController = [[STPCheckoutViewController alloc] initWithOptions:options];
-    checkoutViewController.checkoutDelegate = self;
-    [self presentViewController:checkoutViewController animated:YES completion:nil];
-}
-
-- (void)checkoutController:(STPCheckoutViewController *)controller didCreateToken:(STPToken *)token completion:(STPTokenSubmissionHandler)completion {
-    [self createBackendChargeWithToken:token completion:completion];
-}
-
-- (void)checkoutController:(STPCheckoutViewController *)controller didFinishWithStatus:(STPPaymentStatus)status error:(NSError *)error {
-    switch (status) {
-    case STPPaymentStatusSuccess:
-        [self paymentSucceeded];
-        break;
-    case STPPaymentStatusError:
-        [self presentError:error];
-        break;
-    case STPPaymentStatusUserCancelled:
-        // do nothing
-        break;
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.applePaySucceeded) {
+            [self paymentSucceeded];
+        } else if (self.applePayError) {
+            [self presentError:self.applePayError];
+        }
+        self.applePaySucceeded = NO;
+        self.applePayError = nil;
+    }];
 }
 
 #pragma mark - Custom Credit Card Form
@@ -179,18 +140,18 @@
 }
 
 - (void)paymentViewController:(PaymentViewController *)controller didFinish:(NSError *)error {
-    [self dismissViewControllerAnimated:YES completion:nil];
-    if (error) {
-        [self presentError:error];
-    } else {
-        [self paymentSucceeded];
-    }
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (error) {
+            [self presentError:error];
+        } else {
+            [self paymentSucceeded];
+        }
+    }];
 }
 
 #pragma mark - STPBackendCharging
 
 - (void)createBackendChargeWithToken:(STPToken *)token completion:(STPTokenSubmissionHandler)completion {
-    NSDictionary *chargeParams = @{ @"stripeToken": token.tokenId, @"amount": @"1000" };
 
     if (!BackendChargeURLString) {
         NSError *error = [NSError
@@ -207,12 +168,33 @@
     }
 
     // This passes the token off to our payment backend, which will then actually complete charging the card using your Stripe account's secret key
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [manager POST:[BackendChargeURLString stringByAppendingString:@"/charge"]
-        parameters:chargeParams
-        success:^(AFHTTPRequestOperation *operation, id responseObject) { completion(STPBackendChargeResultSuccess, nil); }
-        failure:^(AFHTTPRequestOperation *operation, NSError *error) { completion(STPBackendChargeResultFailure, error); }];
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    
+    NSString *urlString = [BackendChargeURLString stringByAppendingPathComponent:@"charge"];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.HTTPMethod = @"POST";
+    NSString *postBody = [NSString stringWithFormat:@"stripeToken=%@&amount=%@", token.tokenId, @1000];
+    NSData *data = [postBody dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSessionUploadTask *uploadTask = [session uploadTaskWithRequest:request
+                                                               fromData:data
+                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                                                   NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+                                                                   if (!error && httpResponse.statusCode != 200) {
+                                                                       error = [NSError errorWithDomain:StripeDomain
+                                                                                                   code:STPInvalidRequestError
+                                                                                               userInfo:@{NSLocalizedDescriptionKey: @"There was an error connecting to your payment backend."}];
+                                                                   }
+                                                                   if (error) {
+                                                                       completion(STPBackendChargeResultFailure, error);
+                                                                   } else {
+                                                                       completion(STPBackendChargeResultSuccess, nil);
+                                                                   }
+                                                               }];
+    
+    [uploadTask resume];
 }
 
 @end

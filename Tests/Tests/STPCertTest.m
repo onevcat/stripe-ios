@@ -6,9 +6,11 @@
 //
 //
 
+@import XCTest;
+
 #import "STPAPIClient.h"
+#import "STPAPIClient+Private.h"
 #import "Stripe.h"
-#import <XCTest/XCTest.h>
 
 NSString *const STPExamplePublishableKey = @"bad_key";
 
@@ -54,7 +56,7 @@ NSString *const STPExamplePublishableKey = @"bad_key";
 }
 
 // helper method
-- (void)createTokenWithBaseURL:(NSURL *)baseURL completion:(STPCompletionBlock)completion {
+- (void)createTokenWithBaseURL:(NSURL *)baseURL completion:(STPTokenCompletionBlock)completion {
     XCTestExpectation *expectation = [self expectationWithDescription:@"Token creation"];
     STPAPIClient *client = [[STPAPIClient alloc] initWithPublishableKey:STPExamplePublishableKey];
     client.apiURL = baseURL;
